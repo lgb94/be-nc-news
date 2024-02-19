@@ -1,13 +1,33 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "serves up a json representation of all the available endpoints of the api",
+    "queries" : [],
+    "exampleResponse" : {
+      "GET /api": {
+        "description": "serves up a json representation of all the available endpoints of the api",
+        "queries": [],
+        "exampleResponse": {}
+      },
+      "GET /api/topics": {
+        "description": "serves an array of all topics",
+        "queries": [],
+        "exampleResponse": { "topics": "[Array]" }
+      },
+      "GET /api/articles": {
+        "description": "serves an array of all articles",
+        "queries": [ "author", "topic", "sort_by", "order" ],
+        "exampleResponse": { "articles": "[Array]" }
+      }
+    },
+    "requestBodyFormat" : "request does not take a body"
   },
   "GET /api/topics": {
     "description": "serves an array of all topics",
     "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
-    }
+    },
+    "requestBodyFormat" : "request does not take a body"
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
@@ -24,6 +44,7 @@
           "comment_count": 6
         }
       ]
-    }
+    },
+    "requestBodyFormat" : "request does not take a body"
   }
 }

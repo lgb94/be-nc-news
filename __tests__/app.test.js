@@ -18,3 +18,28 @@ describe('GET api/topics', () => {
     })
 });
 
+describe('GET api', () => {
+    test('sending a request to /api returns a Status-200: responds with an object.', () => {
+        return request(app)
+            .get('/api')
+            .expect(200)
+            .then(({body}) => {
+                expect(typeof body).toBe('object')
+            })
+    })
+    test('sending a request to /api returns a Status-200: responds with an object, each value within the object containing the relevant keys - "description", "queries", "exampleResponse", "requestBodyFormat"', () => {
+        return request(app)
+            .get('/api')
+            .expect(200)
+            .then(({body}) => {
+                for (const key in body){
+                    expect(body[key]).toMatchObject({
+                        "description": expect.any(String),
+                        "queries": expect.any(Array),
+                        "exampleResponse": expect.any(Object),
+                        "requestBodyFormat": expect.any(String)
+                    })
+                }
+            })
+    })
+});
