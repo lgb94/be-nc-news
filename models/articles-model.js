@@ -28,3 +28,19 @@ exports.fetchAllArticles = () => {
         return result.rows
     })
 }
+
+exports.fetchCommentsById = (id) => {
+    const queryValues = []
+    queryValues.push(id)
+    let sqlString = `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at DESC`
+    return db.query(sqlString, queryValues)
+    .then((result) => {
+        if(result.rows.length === 0){
+            return Promise.reject({
+                status : 404,
+                msg: "bad request"
+            })
+        }
+        else {return result.rows}
+    })
+}

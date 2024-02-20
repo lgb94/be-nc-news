@@ -132,3 +132,71 @@ describe('GET api/articles', () => {
             })
     })
 });
+
+describe('GET api/articles/:article_id/comments', () => {
+    test('sending an API request to api/articles/:articles_id/comments returns a Status-200: responds with an object, with a key comments, which has the value of an array of comments relevant to given id - in this case, article id 1 should have 11 comments.', () => {
+        return request(app)
+            .get('/api/articles/1/comments')
+            .expect(200)
+            .then(({body}) => {
+                const comments = body.comments
+                expect(comments).toHaveLength(11)
+            })
+    })
+    test('sending an API request to api/articles/:articles_id/comments returns a Status-200: responds with an object, with a key comments, which has the value of an array of comments relevant to given id - in this case, article id 3 should have 2 comments. Each comment has the required properties', () => {
+        return request(app)
+            .get('/api/articles/3/comments')
+            .expect(200)
+            .then(({body}) => {
+                const comments = body.comments
+                expect(comments).toHaveLength(2)
+                comments.forEach((comment) => {
+                    expect(comment).toMatchObject({
+                        "comment_id" : expect.any(Number),
+                        "votes" : expect.any(Number),
+                        "created_at" : expect.any(String),
+                        "author" : expect.any(String),
+                        "body" : expect.any(String),
+                        "article_id" : 3
+                    })
+                })
+            })
+    })
+    test('sending an API request to api/articles/:articles_id/comments returns a Status-200: responds with an object, with a key comments, which has the value of an array of comments relevant to given id - in this case, article id 1 should have 11 comments. Each comment has the required properties. The returned array is returned with its most recent comment 1st', () => {
+        return request(app)
+            .get('/api/articles/1/comments')
+            .expect(200)
+            .then(({body}) => {
+                const comments = body.comments
+                expect(comments).toHaveLength(11)
+                comments.forEach((comment) => {
+                    expect(comment).toMatchObject({
+                        "comment_id" : expect.any(Number),
+                        "votes" : expect.any(Number),
+                        "created_at" : expect.any(String),
+                        "author" : expect.any(String),
+                        "body" : expect.any(String),
+                        "article_id" : 1
+                    })
+                })
+                expect(comments[0].comment_id).toBe(5)
+                expect(comments[10].comment_id).toBe(9)
+            })
+    })
+    test.only('sending an API request to an article_id that returns no results returns a Status-404, and an object with msg key "bad request"', () => {
+        return request(app)
+            .get('/api/articles/2/comments')
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })
+    })
+    test('sending an API request with an article_id that isnt a number (invalid) returns a Status-400, and an object with msg key "bad request"', () => {
+        return request(app)
+            .get('/api/articles/dogdirt/comments')
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })
+    })
+});
