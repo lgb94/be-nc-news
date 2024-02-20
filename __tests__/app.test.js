@@ -183,7 +183,7 @@ describe('GET api/articles/:article_id/comments', () => {
                 expect(comments[10].comment_id).toBe(9)
             })
     })
-    test.only('sending an API request to an article_id that returns no results returns a Status-404, and an object with msg key "bad request"', () => {
+    test('sending an API request to an article_id that returns no results returns a Status-404, and an object with msg key "bad request"', () => {
         return request(app)
             .get('/api/articles/2/comments')
             .expect(404)
@@ -200,3 +200,19 @@ describe('GET api/articles/:article_id/comments', () => {
             })
     })
 });
+
+describe.only('POST api/articles/:article_id/comments', () => {
+    test('sending a POST request to api/articles/:articles_id/comments sends a request to the right place.', () => {
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send({ 
+                username: "GiveDollarRobert", 
+                body : "you suck"
+            })
+            .expect(200)
+            .then(({body}) => {
+                console.log(body)
+            })
+            
+    })
+})
