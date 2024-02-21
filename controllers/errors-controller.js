@@ -11,8 +11,14 @@ exports.handlePSQLErrors = (err, req, res, next) => {
   if(err.code === '22P02'){
     res.status(400).send({msg: "bad request"})
   }
+  else if(err.code === '23502'){
+    res.status(400).send({msg: "bad request"})
+  }
+  else if(err.code === '23503'){
+    res.status(400).send({msg: "bad request"})
+  }
   else if(err.code){
-    console.log(err.code, '<<<< google this psql error')
+  console.log(err.code, '<<<< google this psql error')
     next(err)
   }
   else {
@@ -22,6 +28,7 @@ exports.handlePSQLErrors = (err, req, res, next) => {
 
 exports.handleServerErrors = (err, req, res, next) => {
   if(err) {
+    console.log(err)
     res.status(500).send({ msg: 'Internal Server Error' })
   }
 };
