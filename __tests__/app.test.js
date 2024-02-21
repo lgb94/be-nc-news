@@ -37,7 +37,7 @@ describe('GET api', () => {
                         "description": expect.any(String),
                         "queries": expect.any(Array),
                         "exampleResponse": expect.any(Object),
-                        "requestBodyFormat": expect.any(String)
+                        "requestBodyFormat": expect.any(Object)
                     })
                 }
             })

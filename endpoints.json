@@ -19,7 +19,7 @@
         "exampleResponse": { "articles": "[Array]" }
       }
     },
-    "requestBodyFormat" : "request does not take a body"
+    "requestBodyFormat" : {}
   },
 
   "GET /api/topics": {
@@ -28,7 +28,7 @@
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     },
-    "requestBodyFormat" : "request does not take a body"
+    "requestBodyFormat" : {}
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
@@ -48,7 +48,7 @@
         }
       ]
     },
-    "requestBodyFormat" : "request does not take a body"
+    "requestBodyFormat" : {}
   },
 
   "GET /api/articles/:article_id": {
@@ -69,7 +69,7 @@
         }
       ]
     },
-    "requestBodyFormat" : "request does not take a body"
+    "requestBodyFormat" : {}
   },
   "GET /api/articles/:article_id/comments": {
     "description": "serves an array of comments, ordered from most recent to oldest, left on an article matching a given article_id",
@@ -94,7 +94,7 @@
     }
       ]
     },
-    "requestBodyFormat" : "request does not take a body"
+    "requestBodyFormat" : {}
   },
   "POST /api/articles/:article_id/comments": {
     "description": "takes a post request object with two keys, username and body, along with an article_id within the request, which adds the comment to the comment database if the given username and article_id are valid",
