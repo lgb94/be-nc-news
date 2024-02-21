@@ -58,19 +58,6 @@ exports.postCommentWithArticleId = (id, commentObject) => {
     const body = commentObject.body
     const votes = 0
 
-    // console.log(articleId, '<<<< article_id to add comment to')
-    // console.log(author, '<<<< author (username) to attach to comment')
-    // console.log(body, '<<<< body to attach to comment')
-    // console.log(votes, '<<<< votes to attach to comment')
-    // console.log(createdAt, '<<<< created_At to attach to comment')
-
-    // const newCommentArray = []
-    // newCommentArray.push(body)
-    // newCommentArray.push(author)
-    // newCommentArray.push(articleId)
-    // newCommentArray.push(votes)
-    // need body, article_id, author, votes, created_at
-
     return db.query("INSERT INTO comments (body, author, article_id, votes) VALUES ($1, $2, $3, $4) RETURNING *;", [body, author, articleId, votes])
     .then((result) => {
         return result.rows[0]
