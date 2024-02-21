@@ -95,6 +95,25 @@
       ]
     },
     "requestBodyFormat" : "request does not take a body"
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "takes a post request object with two keys, username and body, along with an article_id within the request, which adds the comment to the comment database if the given username and article_id are valid",
+    "queries": [],
+    "exampleResponse": {
+      "comment":
+        {
+          "comment_id" : 19,
+          "votes" : 100,
+          "created_at" : "2024-02-21T15:59:13.341Z",
+          "author" : "GiveDollarRobert",
+          "body" : "you suck",
+          "article_id" : 1
+      }
+      
+    },
+    "requestBodyFormat" : {
+      "username" : "GiveDollarRobert",
+      "body" :"you suck"
+    }
   }
-
 }
