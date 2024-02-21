@@ -44,3 +44,24 @@ exports.fetchCommentsById = (id) => {
         else {return result.rows}
     })
 }
+
+exports.postCommentWithArticleId = (id, commentObject) => {
+    
+    if (!Object.keys(commentObject).includes('username', 'body') || Object.keys(commentObject).length !== 2){
+        return Promise.reject({
+            status : 400,
+            msg : "bad request"
+        })
+    }
+    const articleId = id
+    const author = commentObject.username
+    const body = commentObject.body
+    const votes = 0
+
+    return db.query("INSERT INTO comments (body, author, article_id, votes) VALUES ($1, $2, $3, $4) RETURNING *;", [body, author, articleId, votes])
+    .then((result) => {
+        return result.rows[0]
+    })
+    
+    
+}

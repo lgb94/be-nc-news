@@ -37,7 +37,7 @@ describe('GET api', () => {
                         "description": expect.any(String),
                         "queries": expect.any(Array),
                         "exampleResponse": expect.any(Object),
-                        "requestBodyFormat": expect.any(String)
+                        "requestBodyFormat": expect.any(Object)
                     })
                 }
             })
@@ -183,7 +183,7 @@ describe('GET api/articles/:article_id/comments', () => {
                 expect(comments[10].comment_id).toBe(9)
             })
     })
-    test.only('sending an API request to an article_id that returns no results returns a Status-404, and an object with msg key "bad request"', () => {
+    test('sending an API request to an article_id that returns no results returns a Status-404, and an object with msg key "bad request"', () => {
         return request(app)
             .get('/api/articles/2/comments')
             .expect(404)
@@ -200,3 +200,99 @@ describe('GET api/articles/:article_id/comments', () => {
             })
     })
 });
+
+describe('POST api/articles/:article_id/comments', () => {
+    test(`sending a POST request to api/articles/:articles_id/comments with a username found within the users table successfully adds a comment to the comment table, returns a status 200, and sends back an object with the new comment added as a key value, on the key of comment.`, () => {
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send({ 
+            username: "rogersop", 
+            body : "spaceships dont come equipped with rear view mirrors"
+            })
+            .expect(200)
+            .then(({body}) => {
+                const comment = body.comment
+                expect(comment).toMatchObject({
+                    "comment_id" : 19,
+                    "votes" : 0,
+                    "created_at" : expect.any(String),
+                    "author" : "rogersop",
+                    "body" : "spaceships dont come equipped with rear view mirrors",
+                    "article_id" : 1
+                })
+            })          
+    })
+    test(`sending a POST request to api/articles/:articles_id/comments with a username found within the users table, but an article_id that doesnt exist returns a 400 with message "bad request".`, () => {
+        return request(app)
+            .post('/api/articles/5000/comments')
+            .send({ 
+                username: "rogersop", 
+                body : "be responsible for what you say because the words you speak can truly cause dismay"
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })          
+    })
+    test(`sending a POST request to api/articles/:articles_id/comments with a username found within the users table, but a completely invalid article_id (not a number) returns a 400 with message "bad request".`, () => {
+        return request(app)
+            .post('/api/articles/andrewdoesntsweat/comments')
+            .send({ 
+                username: "rogersop", 
+                body : "america america now im going africa my death is money"
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })          
+    })
+    test(`sending a POST request to api/articles/:articles_id/comments with a username not found within the users table sends back a 400 status with the message - "bad request".`, () => {
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send({ 
+                username: "GiveDollarRobert", 
+                body : "I close my eyes and seize it, i clench my fists and beat it, i light my torch and burn it, i am the beast i worship"
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })          
+    })
+    test(`sending a POST request to api/articles/:articles_id/comments with a valid username ONLY returns an error code 400 and a msg "bad request".`, () => {
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send({ 
+                username: "rogersop" 
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })          
+    })
+    test(`sending a POST request to api/articles/:articles_id/comments with a valid username, a valid body AND an extra key returns an error code 400 with message "bad request".`, () => {
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send({ 
+                username: "rogersop",
+                body : "I can let these dream killers kill my self esteem or use my arrogance as the steam to power my dreams", 
+                mysteryThirdKey: "I'm here to attempt break your test"
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })          
+    })
+    test(`sending a POST request to api/articles/:articles_id/comments with a valid username and a body key, but the value for body is null, an error code 400 is returned with msg "bad request".`, () => {
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send({ 
+                username: "rogersop",
+                body : null 
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })          
+    })
+    
+})
