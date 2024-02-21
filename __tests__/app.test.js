@@ -8,7 +8,7 @@ beforeEach(() => seed(data))
 afterAll(() => db.end())
 
 describe('GET api/topics', () => {
-    test('sending an API request to api/topics returns a Status-200: responds with an object, with a key topics, which has the value of an array containing all relevant data.', () => {
+    test('GET api/topics gives Status-200: responds with an object, with a key topics, which has the value of an array containing all relevant data.', () => {
         return request(app)
             .get('/api/topics')
             .expect(200)
@@ -19,7 +19,7 @@ describe('GET api/topics', () => {
 });
 
 describe('GET api', () => {
-    test('sending a request to /api returns a Status-200: responds with an object.', () => {
+    test('GET /api gives Status-200: responds with an object.', () => {
         return request(app)
             .get('/api')
             .expect(200)
@@ -27,7 +27,7 @@ describe('GET api', () => {
                 expect(typeof body).toBe('object')
             })
     })
-    test('sending a request to /api returns a Status-200: responds with an object, each value within the object containing the relevant keys - "description", "queries", "exampleResponse", "requestBodyFormat"', () => {
+    test('GET /api gives Status-200: responds with an object with relevant keys - "description", "queries", "exampleResponse", "requestBodyFormat"', () => {
         return request(app)
             .get('/api')
             .expect(200)
@@ -45,7 +45,7 @@ describe('GET api', () => {
 });
 
 describe('GET api/articles/:article_id', () => {
-    test('sending an API request to api/articles/1 returns a Status-200: responds with an object, with a key articles, which has the value of the article matching the given id - in this case - 1.', () => {
+    test('GET /api/articles/1 gives Status-200: responds with an object, key of articles, value of the article matching the given id (1).', () => {
         return request(app)
             .get('/api/articles/1')
             .expect(200)
@@ -61,7 +61,7 @@ describe('GET api/articles/:article_id', () => {
                 })
             })
     })
-    test('sending an API request to api/articles/0 returns an error: since no articles match the ID Of 0, the empty result should be caught with a 404.', () => {
+    test('GET /api/articles/0 gives Status-404 - no articles match ID (0), so returned object with "msg" key "bad request".', () => {
         return request(app)
             .get('/api/articles/0')
             .expect(404)
@@ -69,7 +69,7 @@ describe('GET api/articles/:article_id', () => {
                 expect(body.msg).toBe("bad request")
             })
     })
-    test('sending an API request to api/articles/fish returns a PSQL error: article_id values will always be numbers so code 400 should be thrown, along with "bad request".', () => {
+    test('GET /api/articles/fish gives Status-400 - PSQL error caught (wrong input type) returned object with "msg" key "bad request".', () => {
         return request(app)
             .get('/api/articles/fish')
             .expect(400)
@@ -80,7 +80,7 @@ describe('GET api/articles/:article_id', () => {
 });
 
 describe('GET api/articles', () => {
-    test('sending an API request to api/articles returns a Status-200: responds with an object, with a key articles, which has the value of an array of ALL articles, in this case - 13 total.', () => {
+    test('GET /api/articles gives Status-200: returns object, key - articles, value - array of ALL articles (13).', () => {
         return request(app)
             .get('/api/articles')
             .expect(200)
@@ -89,7 +89,7 @@ describe('GET api/articles', () => {
                 expect(articles).toHaveLength(13)
             })
     })
-    test('sending an API request to api/articles returns a Status-200: responds with an object, with a key articles, which has the value of an array of ALL articles, with the correct keys assigned', () => {
+    test('GET /api/articles gives Status-200: returns object, key - articles, value - array of ALL articles, articles have ALL required keys.', () => {
         return request(app)
             .get('/api/articles')
             .expect(200)
@@ -109,7 +109,7 @@ describe('GET api/articles', () => {
                 })
             })
     })
-    test('sending an API request to api/articles returns a Status-200: responds with an object, with a key articles, which has the value of an array of ALL articles, with the correct keys assigned, and is sorted by created_at in descending order', () => {
+    test('GET /api/articles gives Status-200: returns object, key - articles, value - array of ALL articles, articles have ALL required keys, sorted by "created_at" value in descending order', () => {
         return request(app)
             .get('/api/articles')
             .expect(200)
@@ -134,16 +134,19 @@ describe('GET api/articles', () => {
 });
 
 describe('GET api/articles/:article_id/comments', () => {
-    test('sending an API request to api/articles/:articles_id/comments returns a Status-200: responds with an object, with a key comments, which has the value of an array of comments relevant to given id - in this case, article id 1 should have 11 comments.', () => {
+    test('GET /api/articles/1/comments gives Status-200: returns object, key - comments, value - array of comments (11 total) relevant to given id (1)', () => {
         return request(app)
             .get('/api/articles/1/comments')
             .expect(200)
             .then(({body}) => {
                 const comments = body.comments
                 expect(comments).toHaveLength(11)
+                comments.forEach((comment) => {
+                    expect(comment.article_id).toBe(1)
+                })
             })
     })
-    test('sending an API request to api/articles/:articles_id/comments returns a Status-200: responds with an object, with a key comments, which has the value of an array of comments relevant to given id - in this case, article id 3 should have 2 comments. Each comment has the required properties', () => {
+    test('GET /api/articles/3/comments gives Status-200: returns object, key - comments, value - array of comments (2 total) relevant to given id (3). Comments have ALL required properties', () => {
         return request(app)
             .get('/api/articles/3/comments')
             .expect(200)
@@ -162,7 +165,7 @@ describe('GET api/articles/:article_id/comments', () => {
                 })
             })
     })
-    test('sending an API request to api/articles/:articles_id/comments returns a Status-200: responds with an object, with a key comments, which has the value of an array of comments relevant to given id - in this case, article id 1 should have 11 comments. Each comment has the required properties. The returned array is returned with its most recent comment 1st', () => {
+    test('GET /api/articles/1/comments gives Status-200: returns object, key - comments, value - array of comments (11 total) relevant to given id (1), Comments have ALL required properties. Returned array has most recent comment 1st', () => {
         return request(app)
             .get('/api/articles/1/comments')
             .expect(200)
@@ -183,15 +186,23 @@ describe('GET api/articles/:article_id/comments', () => {
                 expect(comments[10].comment_id).toBe(9)
             })
     })
-    test('sending an API request to an article_id that returns no results returns a Status-404, and an object with msg key "bad request"', () => {
+    test('GET /api/articles/2/comments gives Status 200: returns object, key - comments, value - [] (an empty array) - given id 2 has no comments.', () => {
         return request(app)
             .get('/api/articles/2/comments')
+            .expect(200)
+            .then(({body}) => {
+                expect(body).toMatchObject({comments : []})
+            })
+    })
+    test('GET /api/articles/20000/comments returns Status-404: article_id is valid (a number), but does not exist. object returned has key "msg", value - "bad request"', () => {
+        return request(app)
+            .get('/api/articles/20000/comments')
             .expect(404)
             .then(({body}) => {
                 expect(body.msg).toBe("bad request")
             })
     })
-    test('sending an API request with an article_id that isnt a number (invalid) returns a Status-400, and an object with msg key "bad request"', () => {
+    test('GET /api/articles/dogdirt/comments returns Status-400: article_id that isnt a number (invalid) - PSQL error caught, object returned, key - msg, value - "bad request"', () => {
         return request(app)
             .get('/api/articles/dogdirt/comments')
             .expect(400)
@@ -202,7 +213,7 @@ describe('GET api/articles/:article_id/comments', () => {
 });
 
 describe('POST api/articles/:article_id/comments', () => {
-    test(`sending a POST request to api/articles/:articles_id/comments with a username found within the users table successfully adds a comment to the comment table, returns a status 200, and sends back an object with the new comment added as a key value, on the key of comment.`, () => {
+    test(`POST /api/articles/1/comments with a valid request (username on users table, valid body, no other keys) returns Status-200, adds given comment to comment table, returns object, key - comment, value - object with new comments table entry.`, () => {
         return request(app)
         .post('/api/articles/1/comments')
         .send({ 
@@ -222,7 +233,7 @@ describe('POST api/articles/:article_id/comments', () => {
                 })
             })          
     })
-    test(`sending a POST request to api/articles/:articles_id/comments with a username found within the users table, but an article_id that doesnt exist returns a 400 with message "bad request".`, () => {
+    test(`POST /api/articles/5000/comments : invalid article_id (number - doesnt exist) gives Status-400, returns object, key - msg, value - "bad request".`, () => {
         return request(app)
             .post('/api/articles/5000/comments')
             .send({ 
@@ -234,7 +245,7 @@ describe('POST api/articles/:article_id/comments', () => {
                 expect(body.msg).toBe("bad request")
             })          
     })
-    test(`sending a POST request to api/articles/:articles_id/comments with a username found within the users table, but a completely invalid article_id (not a number) returns a 400 with message "bad request".`, () => {
+    test(`POST /api/articles/andrewdoesntsweat/comments : invalid article_id (not a number) gives status-400, returns object, key - msg, value - "bad request".`, () => {
         return request(app)
             .post('/api/articles/andrewdoesntsweat/comments')
             .send({ 
@@ -246,7 +257,7 @@ describe('POST api/articles/:article_id/comments', () => {
                 expect(body.msg).toBe("bad request")
             })          
     })
-    test(`sending a POST request to api/articles/:articles_id/comments with a username not found within the users table sends back a 400 status with the message - "bad request".`, () => {
+    test(`POST /api/articles/1/comments with INVALID USERNAME (not found in users table) gives Status-400, returns object, key - msg, value - "bad request".`, () => {
         return request(app)
             .post('/api/articles/1/comments')
             .send({ 
@@ -258,7 +269,7 @@ describe('POST api/articles/:article_id/comments', () => {
                 expect(body.msg).toBe("bad request")
             })          
     })
-    test(`sending a POST request to api/articles/:articles_id/comments with a valid username ONLY returns an error code 400 and a msg "bad request".`, () => {
+    test(`POST /api/articles/1/comments with a valid username ONLY (single key on request object) gives status-400, returns an object, key - msg, value - "bad request".`, () => {
         return request(app)
             .post('/api/articles/1/comments')
             .send({ 
@@ -269,7 +280,7 @@ describe('POST api/articles/:article_id/comments', () => {
                 expect(body.msg).toBe("bad request")
             })          
     })
-    test(`sending a POST request to api/articles/:articles_id/comments with a valid username, a valid body AND an extra key returns an error code 400 with message "bad request".`, () => {
+    test(`POST /api/articles/1/comments with valid username, a valid body AND an EXTRA KEY on request objectgives status-400, returns an object, key - msg, value -"bad request".`, () => {
         return request(app)
             .post('/api/articles/1/comments')
             .send({ 
@@ -282,7 +293,7 @@ describe('POST api/articles/:article_id/comments', () => {
                 expect(body.msg).toBe("bad request")
             })          
     })
-    test(`sending a POST request to api/articles/:articles_id/comments with a valid username and a body key, but the value for body is null, an error code 400 is returned with msg "bad request".`, () => {
+    test(`POST /api/articles/1/comments with valid username, given body = null gives status-400, object returned with key - msg, value - "bad request".`, () => {
         return request(app)
             .post('/api/articles/1/comments')
             .send({ 
