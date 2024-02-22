@@ -392,3 +392,30 @@ describe('PATCH api/articles/:article_id', () => {
             })
     })
 })
+
+describe('DELETE api/comments/:comment_id', () => {
+    test('DELETE /api/comments/3 gives Status-204 A valid comment_id deletes respective comment from comments database. Returns an empty object', () => {
+        return request(app)
+            .delete('/api/comments/3')
+            .expect(204)
+            .then(({body}) => {
+                expect(body).toEqual({})
+            })
+    })
+    test('DELETE /api/comments/30000 gives Status-404 A valid comment_id but doesnt exist in db returns object, key - msg, value - bad request', () => {
+        return request(app)
+            .delete('/api/comments/30000')
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })
+    })
+    test('DELETE /api/comments/swagmaster gives Status-400: invalid comment_id PSQL errors db and returns object, key - msg, value - bad request', () => {
+        return request(app)
+            .delete('/api/comments/swagmaster')
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })
+    })
+})
