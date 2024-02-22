@@ -9,4 +9,8 @@
 
 -- SELECT article_id, votes FROM articles;
 
-UPDATE articles SET votes = votes + 50 WHERE article_id = 2 RETURNING *;
+-- UPDATE articles SET votes = votes + 50 WHERE article_id = 2 RETURNING *;
+
+SELECT * FROM comments;
+
+-- DELETE FROM comments WHERE comment_id = 3 RETURNING *;
