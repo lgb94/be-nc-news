@@ -50,12 +50,20 @@ exports.postCommentWithArticleId = (id, commentObject) => {
     const articleId = id
     const author = commentObject.username
     const body = commentObject.body
-    const votes = 0
 
-    return db.query("INSERT INTO comments (body, author, article_id, votes) VALUES ($1, $2, $3, $4) RETURNING *;", [body, author, articleId, votes])
+    return db.query("INSERT INTO comments (body, author, article_id) VALUES ($1, $2, $3) RETURNING *;", [body, author, articleId])
     .then((result) => {
         return result.rows[0]
     })
     
     
+}
+
+exports.updateArticleVotesWithId = (id, patchObject) => {
+    const articleId = id
+    const updateVoteValue = patchObject.inc_votes
+    return db.query("UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;", [updateVoteValue, articleId])
+    .then((result) => {
+        return result.rows[0]
+    })
 }

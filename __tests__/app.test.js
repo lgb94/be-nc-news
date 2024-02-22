@@ -233,14 +233,14 @@ describe('POST api/articles/:article_id/comments', () => {
                 })
             })          
     })
-    test(`POST /api/articles/5000/comments : invalid article_id (number - doesnt exist) gives Status-400, returns object, key - msg, value - "bad request".`, () => {
+    test(`POST /api/articles/5000/comments : invalid article_id (number - doesnt exist) gives Status-404, returns object, key - msg, value - "bad request".`, () => {
         return request(app)
             .post('/api/articles/5000/comments')
             .send({ 
                 username: "rogersop", 
                 body : "be responsible for what you say because the words you speak can truly cause dismay"
             })
-            .expect(400)
+            .expect(404)
             .then(({body}) => {
                 expect(body.msg).toBe("bad request")
             })          
@@ -257,14 +257,14 @@ describe('POST api/articles/:article_id/comments', () => {
                 expect(body.msg).toBe("bad request")
             })          
     })
-    test(`POST /api/articles/1/comments with INVALID USERNAME (not found in users table) gives Status-400, returns object, key - msg, value - "bad request".`, () => {
+    test(`POST /api/articles/1/comments with INVALID USERNAME (not found in users table) gives Status-404, returns object, key - msg, value - "bad request".`, () => {
         return request(app)
             .post('/api/articles/1/comments')
             .send({ 
                 username: "GiveDollarRobert", 
                 body : "I close my eyes and seize it, i clench my fists and beat it, i light my torch and burn it, i am the beast i worship"
             })
-            .expect(400)
+            .expect(404)
             .then(({body}) => {
                 expect(body.msg).toBe("bad request")
             })          
@@ -306,4 +306,89 @@ describe('POST api/articles/:article_id/comments', () => {
             })          
     })
     
+})
+
+describe('PATCH api/articles/:article_id', () => {
+    test('PATCH /api/articles/2 gives Status-200 when given a valid object: responds with an object, key of article, value of the article matching the given id (2) votes value updated by the amount given in the request object (0 >>> 50).', () => {
+        return request(app)
+            .patch('/api/articles/2')
+            .send({
+                inc_votes: 50
+            })
+            .expect(200)
+            .then(({body}) => {
+                expect(body.article).toMatchObject({
+                    "author": expect.any(String),
+                    "title": expect.any(String),
+                    "article_id": 2,
+                    "body": expect.any(String),
+                    "created_at": expect.any(String),
+                    "votes": 50,
+                    "article_img_url": expect.any(String)
+                })
+            })
+    })
+    test('PATCH /api/articles/2 gives Status-200 when given a valid object: responds with an object, key of article, value of the article matching the given id (2) votes value updated by the amount given in the request object (0 >>> -50).', () => {
+        return request(app)
+            .patch('/api/articles/2')
+            .send({
+                inc_votes: -50
+            })
+            .expect(200)
+            .then(({body}) => {
+                expect(body.article).toMatchObject({
+                    "author": expect.any(String),
+                    "title": expect.any(String),
+                    "article_id": 2,
+                    "body": expect.any(String),
+                    "created_at": expect.any(String),
+                    "votes": -50,
+                    "article_img_url": expect.any(String)
+                })
+            })
+    })
+    test('PATCH /api/articles/2000 : invalid article_id (number - doesnt exist) gives Status-404, returns object, key - msg, value - "bad request"', () => {
+        return request(app)
+            .patch('/api/articles/2000')
+            .send({
+                inc_votes: -50
+            })
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toBe('bad request')
+            })
+    })
+    test('PATCH /api/articles/thelatestone : invalid article_id (incorrect data type) gives Status-400, returns object, key - msg, value - "bad request"', () => {
+        return request(app)
+            .patch('/api/articles/thelatestone')
+            .send({
+                inc_votes: -50
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('bad request')
+            })
+    })
+    test('PATCH /api/articles/2 : invalid request (wrong key) gives Status-400, returns object, key - msg, value - "bad request"', () => {
+        return request(app)
+            .patch('/api/articles/2')
+            .send({
+                dont_inc_vote: 450
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('bad request')
+            })
+    })
+    test('PATCH /api/articles/2 : invalid request (value given not a number) gives Status-400, returns object, key - msg, value - "bad request"', () => {
+        return request(app)
+            .patch('/api/articles/2')
+            .send({
+                inc_votes: 'nobody voted for this one'
+            })
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe('bad request')
+            })
+    })
 })

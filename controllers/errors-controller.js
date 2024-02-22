@@ -15,7 +15,7 @@ exports.handlePSQLErrors = (err, req, res, next) => {
     res.status(400).send({msg: "bad request"})
   }
   else if(err.code === '23503'){
-    res.status(400).send({msg: "bad request"})
+    res.status(404).send({msg: "bad request"})
   }
   else if(err.code){
     console.log(err.code, '<<<< google this psql error')

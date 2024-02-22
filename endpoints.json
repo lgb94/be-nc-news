@@ -115,5 +115,25 @@
       "username" : "GiveDollarRobert",
       "body" :"you suck"
     }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "takes a patch request object with one key - inc_votes, which increments given article_id's relevant vote count by given value",
+    "queries": [],
+    "exampleResponse": {
+      "article":{
+        "article_id": 1,
+        "title": "Living in the shadow of a great man",
+        "topic": "mitch",
+        "author": "butter_bridge",
+        "body": "I find this existence challenging",
+        "created_at": "2019-05-30T15:59:13.341Z",
+        "votes": 150,
+        "article_img_url":
+          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+      }
+    },
+    "requestBodyFormat" : {
+      "inc_vote" : 50
+    }
   }
 }
