@@ -7,4 +7,6 @@
 -- GROUP BY articles.article_id
 -- ORDER BY articles.created_at DESC
 
-SELECT * FROM comments
+-- SELECT article_id, votes FROM articles;
+
+UPDATE articles SET votes = votes + 50 WHERE article_id = 2 RETURNING *;
