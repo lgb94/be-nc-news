@@ -135,5 +135,11 @@
     "requestBodyFormat" : {
       "inc_vote" : 50
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "takes a comment_id, and deletes matching comment from comments database",
+    "queries": [],
+    "exampleResponse": {},
+    "requestBodyFormat" : {}
   }
 }
