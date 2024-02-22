@@ -1,5 +1,6 @@
 const express = require("express");
 const { getTopics } = require(`${__dirname}/controllers/topics-controller`)
+const { getUsers } = require(`${__dirname}/controllers/users-controller`)
 const { deleteComment } = require(`${__dirname}/controllers/comments-controller`)
 const { getArticleById, getAllArticles, getArticleCommentsById, postComment, patchArticleVotes } = require(`${__dirname}/controllers/articles-controller`)
 const { getEndpoints } = require(`${__dirname}/controllers/endpoints-controller`)
@@ -12,6 +13,8 @@ app.use(express.json());
 app.get('/api', getEndpoints);
 
 app.get('/api/topics', getTopics);
+
+app.get('/api/users', getUsers);
 
 app.get('/api/articles', getAllArticles);
 

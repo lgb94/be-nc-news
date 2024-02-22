@@ -141,5 +141,19 @@
     "queries": [],
     "exampleResponse": {},
     "requestBodyFormat" : {}
-  }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "articles": [
+        {
+          "username": "GiveDollarRobert",
+          "name": "Pascal Chimbonda",
+          "avatar_url": "https://cdn.theathletic.com/cdn-cgi/image/width=770%2cformat=auto%2cquality=75/https://cdn.theathletic.com/app/uploads/2020/05/10063123/pascal-chimbonda-wigan-tottenham-sunderland-blackburn-france-interview-e1589110511329-1024x684.jpeg"
+        }
+      ]
+    },
+    "requestBodyFormat" : {}
+  }  
 }
