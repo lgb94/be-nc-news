@@ -31,8 +31,8 @@
     "requestBodyFormat" : {}
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles",
-    "queries": [],
+    "description": "serves an array of all articles. Can *theoretically* take any amount of queries to DB columns in order to filter results. Numerical data can be filtered by greater than, greater than or equal to, less than, less than or equal to and not equal to.",
+    "queries": ["author=","title=","article_id=","votes=","article_id[gt]=","article_id[gte]=","article_id[lt]=","article_id[lte]=","article_id[ne]=","votes[gt]=","votes[gte]=","votes[lt]=","votes[lte]=","votes[ne]=" ],
     "exampleResponse": {
       "articles": [
         {

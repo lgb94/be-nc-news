@@ -133,6 +133,430 @@ describe('GET api/articles', () => {
     })
 });
 
+describe('GET api/articles?query', () => {
+    test('GET /api/articles?topic=cats - SINGLE VALID TOPIC QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (1 result).', () => {
+        return request(app)
+            .get('/api/articles?topic=cats')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": "cats",
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                })
+                expect(articles).toHaveLength(1)
+            })
+    })
+    test('GET /api/articles?author=rogersop - SINGLE VALID AUTHOR QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (3 results).', () => {
+        return request(app)
+            .get('/api/articles?author=rogersop')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": "rogersop",
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                })
+                expect(articles).toHaveLength(3)
+            })
+    })
+    test('GET /api/articles?title=A - SINGLE VALID TITLE QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (1 result).', () => {
+        return request(app)
+            .get('/api/articles?title=A')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": "A",
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                })
+                expect(articles).toHaveLength(1)
+            })
+    })
+    test('GET /api/articles?article_id=5 - SINGLE VALID ARTICLE_ID = QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (1 result).', () => {
+        return request(app)
+            .get('/api/articles?article_id=5')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": 5,
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                })
+                expect(articles).toHaveLength(1)
+            })
+    })
+    test('GET /api/articles?article_id[gt]=12 - SINGLE VALID ARTICLE_ID > QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (1 result).', () => {
+        return request(app)
+            .get('/api/articles?article_id[gt]=12')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.article_id).toBeGreaterThan(12)
+                })
+                expect(articles).toHaveLength(1)
+            })
+    })
+    test('GET /api/articles?article_id[gte]=12 - SINGLE VALID ARTICLE_ID >= QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (2 results).', () => {
+        return request(app)
+            .get('/api/articles?article_id[gte]=12')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.article_id).toBeGreaterThanOrEqual(0)
+                })
+                expect(articles).toHaveLength(2)
+            })
+    })
+    test('GET /api/articles?article_id[lt]=5 - SINGLE VALID ARTICLE_ID < QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (4 results).', () => {
+        return request(app)
+            .get('/api/articles?article_id[lt]=5')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.article_id).toBeLessThan(5)
+                })
+                expect(articles).toHaveLength(4)
+            })
+    })
+    test('GET /api/articles?article_id[lte]=0 - SINGLE ARTICLE_ID <= QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (5 results).', () => {
+        return request(app)
+            .get('/api/articles?article_id[lte]=5')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.article_id).toBeLessThanOrEqual(5)
+                })
+                expect(articles).toHaveLength(5)
+            })
+    })
+    test('GET /api/articles?article_id[ne]=6 - SINGLE VALID ARTICLE_ID != QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (12 results).', () => {
+        return request(app)
+            .get('/api/articles?article_id[ne]=6')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.article_id).not.toBe(6)
+                })
+                expect(articles).toHaveLength(12)
+                })
+    })
+    test('GET /api/articles?votes=0 - SINGLE VALID VOTES = QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (12 results).', () => {
+        return request(app)
+            .get('/api/articles?votes=0')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": 0,
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                })
+                expect(articles).toHaveLength(12)
+            })
+    })
+    test('GET /api/articles?votes[gt]=0 - SINGLE VALID VOTES > QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (1 result).', () => {
+        return request(app)
+            .get('/api/articles?votes[gt]=0')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.votes).toBeGreaterThan(0)
+                })
+                expect(articles).toHaveLength(1)
+            })
+    })
+    test('GET /api/articles?votes[gte]=0 - SINGLE VALID VOTES >= QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (13 results).', () => {
+        return request(app)
+            .get('/api/articles?votes[gte]=0')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.votes).toBeGreaterThanOrEqual(0)
+                })
+                expect(articles).toHaveLength(13)
+            })
+    })
+    test('GET /api/articles?votes[lt]=10 - SINGLE VALID VOTES < QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (12 results).', () => {
+        return request(app)
+            .get('/api/articles?votes[lt]=10')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.votes).toBeLessThan(10)
+                })
+                expect(articles).toHaveLength(12)
+            })
+    })
+    test('GET /api/articles?votes[lte]=0 - SINGLE VALID VOTES <= QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (12 results).', () => {
+        return request(app)
+            .get('/api/articles?votes[lte]=0')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.votes).toBeLessThanOrEqual(0)
+                })
+                expect(articles).toHaveLength(12)
+            })
+    })
+    test('GET /api/articles?votes[ne]=0 - SINGLE VALID VOTES != QUERY: Status-200: returns object, key - articles, value - array filtered correctly by query given (1 result).', () => {
+        return request(app)
+            .get('/api/articles?votes[ne]=0')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.votes).not.toBe(0)
+                })
+                expect(articles).toHaveLength(1)
+                })
+    })
+    test('GET /api/articles?colour=blue - SINGLE INVALID COLUMN QUERY: Status-404: returns object, key - msg, value - "bad request".', () => {
+        return request(app)
+            .get('/api/articles?colour=blue')
+            .expect(404)
+            .then(({body}) => {
+                const msg = body.msg
+                expect(msg).toBe("bad request")
+            })
+    })
+    test('GET /api/articles?votes=absolutelyloads - SINGLE INVALID QUERY VALUE: Status-404: returns object, key - msg, value - "bad request".', () => {
+        return request(app)
+            .get('/api/articles?votes=absolutelyloads')
+            .expect(400)
+            .then(({body}) => {
+                const msg = body.msg
+                expect(msg).toBe("bad request")
+            })
+    })
+    test('GET /api/articles?article_id[gt]=5&votes[ne]=12 - TWO VALID QUERIES: Status-200: returns object, key - articles, value - array filtered correctly by queries given (8 articles).', () => {
+        return request(app)
+            .get('/api/articles?article_id[gt]=5&votes[ne]=12')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.article_id).toBeGreaterThan(5)
+                    expect(article.votes).not.toBe(12)
+                })
+                expect(articles).toHaveLength(8)
+                })
+    })
+    test('GET /api/articles?article_id[gt]=5&votes[ne]=12&author=rogersop - THREE VALID QUERIES: Status-200: returns object, key - articles, value - array filtered correctly by queries given (1 result).', () => {
+        return request(app)
+            .get('/api/articles?article_id[gt]=5&votes[ne]=12&author=rogersop')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": "rogersop",
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(String)
+                    })
+                    expect(article.article_id).toBeGreaterThan(5)
+                    expect(article.votes).not.toBe(12)
+                })
+                expect(articles).toHaveLength(1)
+                })
+    })
+    test('GET /api/articles?article_id[gte]=7&colour=lilac - QUERY 1 = VALID, QUERY TWO = INVALID (INVALID COLUMN) : Status-404: returns object, key - msg, value - "bad request"', () => {
+        return request(app)
+            .get('/api/articles?article_id[gt]=5&colour=lilac')
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })
+    })
+    test('GET /api/articles?genre=nu_metal&article_id[gt]=5 - QUERY 1 = INVALID, QUERY TWO = VALID (INVALID COLUMN) : Status-404: returns object, key - msg, value - "bad request"', () => {
+        return request(app)
+            .get('/api/articles?genre=nu_metal&article_id[gt]=5')
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })
+    })
+    test('GET /api/articles?article_id[gte]=squirrel&votes[ne]=0 - QUERY 1 = VALID, QUERY TWO = INVALID (INVALID DATA TYPE) : Status-400: returns object, key - msg, value - "bad request"', () => {
+        return request(app)
+            .get('/api/articles?article_id[gte]=squirrel&votes[ne]=0')
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })
+    })
+    test('GET /api/articles?article_id[gt]=rasclart&votes[ne]=0 - QUERY 1 = INVALID, QUERY TWO = VALID (INVALID DATA TYPE) : Status-400: returns object, key - msg, value - "bad request"', () => {
+        return request(app)
+            .get('/api/articles?article_id[gt]=rasclart&votes[ne]=0')
+            .expect(400)
+            .then(({body}) => {
+                expect(body.msg).toBe("bad request")
+            })
+    })
+});
+
 describe('GET api/articles/:article_id/comments', () => {
     test('GET /api/articles/1/comments gives Status-200: returns object, key - comments, value - array of comments (11 total) relevant to given id (1)', () => {
         return request(app)
