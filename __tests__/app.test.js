@@ -57,7 +57,8 @@ describe('GET api/articles/:article_id', () => {
                     "body": expect.any(String),
                     "created_at": expect.any(String),
                     "votes": expect.any(Number),
-                    "article_img_url": expect.any(String)
+                    "article_img_url": expect.any(String),
+                    "comment_count" : expect.any(Number)
                 })
             })
     })
@@ -104,7 +105,7 @@ describe('GET api/articles', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                 })
             })
@@ -124,7 +125,7 @@ describe('GET api/articles', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                 })
                 expect(articles[0].created_at).toBe('2020-11-03T09:12:00.000Z')
@@ -149,7 +150,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                 })
                 expect(articles).toHaveLength(1)
@@ -170,7 +171,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                 })
                 expect(articles).toHaveLength(3)
@@ -191,7 +192,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                 })
                 expect(articles).toHaveLength(1)
@@ -212,7 +213,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                 })
                 expect(articles).toHaveLength(1)
@@ -233,7 +234,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.article_id).toBeGreaterThan(12)
                 })
@@ -255,7 +256,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.article_id).toBeGreaterThanOrEqual(0)
                 })
@@ -277,7 +278,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.article_id).toBeLessThan(5)
                 })
@@ -299,7 +300,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.article_id).toBeLessThanOrEqual(5)
                 })
@@ -321,7 +322,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.article_id).not.toBe(6)
                 })
@@ -343,7 +344,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": 0,
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                 })
                 expect(articles).toHaveLength(12)
@@ -364,7 +365,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.votes).toBeGreaterThan(0)
                 })
@@ -386,7 +387,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.votes).toBeGreaterThanOrEqual(0)
                 })
@@ -408,7 +409,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.votes).toBeLessThan(10)
                 })
@@ -430,7 +431,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.votes).toBeLessThanOrEqual(0)
                 })
@@ -452,7 +453,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.votes).not.toBe(0)
                 })
@@ -492,7 +493,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.article_id).toBeGreaterThan(5)
                     expect(article.votes).not.toBe(12)
@@ -515,7 +516,7 @@ describe('GET api/articles?query', () => {
                         "created_at": expect.any(String),
                         "votes": expect.any(Number),
                         "article_img_url": expect.any(String),
-                        "comment_count": expect.any(String)
+                        "comment_count": expect.any(Number)
                     })
                     expect(article.article_id).toBeGreaterThan(5)
                     expect(article.votes).not.toBe(12)
