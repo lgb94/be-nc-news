@@ -44,7 +44,7 @@ describe('GET api', () => {
     })
 });
 
-describe.only('GET api/articles/:article_id', () => {
+describe('GET api/articles/:article_id', () => {
     test('GET /api/articles/1 gives Status-200: responds with an object, key of articles, value of the article matching the given id (1).', () => {
         return request(app)
             .get('/api/articles/1')
