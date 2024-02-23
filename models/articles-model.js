@@ -3,7 +3,14 @@ const db = require(`${__dirname}/../db/connection`)
 exports.fetchArticleById = (id) => {
     const queryValues = []
     queryValues.push(id)
-    let sqlString = `SELECT * FROM articles WHERE article_id = $1`
+
+    let sqlString = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes,articles.body, articles.article_img_url,
+    COUNT(comments.article_id) ::int AS comment_count
+    FROM comments
+    right JOIN articles on articles.article_id = comments.article_id 
+    WHERE articles.article_id = $1
+    GROUP BY articles.article_id`
+
         return db.query(sqlString, queryValues)
         .then((result) => {
             if (result.rows.length === 0){
@@ -23,10 +30,10 @@ exports.fetchAllArticles = (queryObject) => {
     if (queries.length > 0){
         
         let queriesArray = []
-        
+
         let sqlString = 
         `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url,
-        COUNT(comments.article_id) AS comment_count
+        COUNT(comments.article_id) ::int AS comment_count
         FROM comments
         right JOIN articles on articles.article_id = comments.article_id`
 
@@ -215,7 +222,7 @@ exports.fetchAllArticles = (queryObject) => {
     else {
     let sqlString = 
     `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url,
-    COUNT(comments.article_id) AS comment_count
+    COUNT(comments.article_id) ::int AS comment_count
     FROM comments
     right JOIN articles on articles.article_id = comments.article_id
     GROUP BY articles.article_id
