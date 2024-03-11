@@ -25,7 +25,15 @@ exports.fetchArticleById = (id) => {
 
 exports.fetchAllArticles = (queryObject) => {
 
+    const columns = ["author", "title", "article_id", "topic", "created_at", "votes", "article_img_url"]
+
     let queries = Object.keys(queryObject)
+
+    queries.filter((item) => {
+        item !== "sort_by" && item !== "order"
+    })
+
+    console.log(queries)
 
     if (queries.length > 0){
         
@@ -211,8 +219,32 @@ exports.fetchAllArticles = (queryObject) => {
                 })
             }
         }
-        sqlString += ` GROUP BY articles.article_id
-        ORDER BY articles.created_at DESC`
+
+        console.log(queryObject)
+
+        if (queryObject.sort_by && columns.includes(queryObject.sort_by)) {
+           console.log('you made it here')
+            sqlString += ` GROUP BY articles.article_id ORDER BY ${queryObject.sort_by}`
+        }
+        
+        else sqlString += ` GROUP BY articles.article_id
+        ORDER BY articles.created_at`
+
+        if (queryObject.order){
+            if (queryObject.order === "desc"){
+                sqlString += ` DESC`
+            }
+            else if (queryObject.order === "asc"){
+                sqlString += ` ASC`
+            }
+            else return Promise.reject({
+                status : 404,
+                msg: "bad request"
+            })
+        }
+        else sqlString += ` DESC`
+        
+        console.log(sqlString)
 
         return db.query(sqlString, queriesArray).then((result) => {
             return result.rows
