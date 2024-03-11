@@ -556,6 +556,28 @@ describe('GET api/articles?query', () => {
                 expect(body.msg).toBe("bad request")
             })
     })
+    test('GET /api/articles?article_id[gt]=5&sort_by=article_id - ONE QUERY - 1 SORT: Status-200: returns object, key - articles, value - array filtered correctly by queries given (8 articles).', () => {
+        return request(app)
+            .get('/api/articles?article_id[gt]=5&sort_by=article_id')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(Number)
+                    })
+                    expect(article.article_id).toBeGreaterThan(5)
+                })
+                expect(articles).toHaveLength(8)
+                })
+    })
 });
 
 describe('GET api/articles/:article_id/comments', () => {
