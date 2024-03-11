@@ -27,13 +27,9 @@ exports.fetchAllArticles = (queryObject) => {
 
     const columns = ["author", "title", "article_id", "topic", "created_at", "votes", "article_img_url"]
 
-    let queries = Object.keys(queryObject)
-
-    queries.filter((item) => {
-        item !== "sort_by" && item !== "order"
-    })
-
-    console.log(queries)
+    let queries = Object.keys(queryObject).filter((item) => {
+        return item !== "sort_by" && item !== "order"
+      })
 
     if (queries.length > 0){
         
@@ -220,10 +216,7 @@ exports.fetchAllArticles = (queryObject) => {
             }
         }
 
-        console.log(queryObject)
-
         if (queryObject.sort_by && columns.includes(queryObject.sort_by)) {
-           console.log('you made it here')
             sqlString += ` GROUP BY articles.article_id ORDER BY ${queryObject.sort_by}`
         }
         
@@ -243,8 +236,6 @@ exports.fetchAllArticles = (queryObject) => {
             })
         }
         else sqlString += ` DESC`
-        
-        console.log(sqlString)
 
         return db.query(sqlString, queriesArray).then((result) => {
             return result.rows

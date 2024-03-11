@@ -556,13 +556,12 @@ describe('GET api/articles?query', () => {
                 expect(body.msg).toBe("bad request")
             })
     })
-    test.only('GET /api/articles?article_id[gt]=5&sort_by=article_id - ONE QUERY - 1 SORT: Status-200: returns object, key - articles, value - array filtered correctly by queries given (8 articles).', () => {
+    test('GET /api/articles?article_id[gt]=5&sort_by=article_id - ONE QUERY - 1 SORT: Status-200: returns object, key - articles, value - array filtered correctly by queries given (8 articles).', () => {
         return request(app)
             .get('/api/articles?article_id[gt]=5&sort_by=article_id')
             .expect(200)
             .then(({body}) => {
                 const articles = body.articles
-                console.log(articles)
                 articles.forEach((article) => {
                     expect(article).toMatchObject({
                         "author": expect.any(String),
