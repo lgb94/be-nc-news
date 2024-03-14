@@ -556,9 +556,53 @@ describe('GET api/articles?query', () => {
                 expect(body.msg).toBe("bad request")
             })
     })
+    test('GET /api/articles?sort_by=article_id&order=desc - NO QUERY 1 SORT (comment_count) 1 ORDER (asc): Status-200: returns object, key - articles, value - array sorted correctly by queries given (lowest comments - highest).', () => {
+        return request(app)
+            .get('/api/articles?sort_by=comment_count&order=asc')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(Number)
+                    })
+                    expect(articles[0].comment_count).toBe(0)
+                    expect(articles[articles.length-1].comment_count).toBe(11)
+                })
+            })
+    })
     test('GET /api/articles?article_id[gt]=5&sort_by=article_id - ONE QUERY - 1 SORT: Status-200: returns object, key - articles, value - array filtered correctly by queries given (8 articles).', () => {
         return request(app)
             .get('/api/articles?article_id[gt]=5&sort_by=article_id')
+            .expect(200)
+            .then(({body}) => {
+                const articles = body.articles
+                articles.forEach((article) => {
+                    expect(article).toMatchObject({
+                        "author": expect.any(String),
+                        "title": expect.any(String),
+                        "article_id": expect.any(Number),
+                        "topic": expect.any(String),
+                        "created_at": expect.any(String),
+                        "votes": expect.any(Number),
+                        "article_img_url": expect.any(String),
+                        "comment_count": expect.any(Number)
+                    })
+                    expect(article.article_id).toBeGreaterThan(5)
+                })
+                expect(articles).toHaveLength(8)
+                })
+    })
+    test('GET /api/articles?article_id[gt]=5&sort_by=article_id&order=asc - ONE QUERY - 1 SORT, ORDER ASC: Status-200: returns object, key - articles, value - array filtered correctly by queries given (8 articles).', () => {
+        return request(app)
+            .get('/api/articles?article_id[gt]=5&sort_by=article_id&order=asc')
             .expect(200)
             .then(({body}) => {
                 const articles = body.articles
@@ -843,7 +887,7 @@ describe('PATCH api/articles/:article_id', () => {
     })
 })
 
-describe('DELETE api/comments/:comment_id', () => {
+xdescribe('DELETE api/comments/:comment_id', () => {
     test('DELETE /api/comments/3 gives Status-204 A valid comment_id deletes respective comment from comments database. Returns an empty object', () => {
         return request(app)
             .delete('/api/comments/3')

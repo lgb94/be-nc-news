@@ -25,7 +25,7 @@ exports.fetchArticleById = (id) => {
 
 exports.fetchAllArticles = (queryObject) => {
 
-    const columns = ["author", "title", "article_id", "topic", "created_at", "votes", "article_img_url"]
+    const columns = ["author", "title", "article_id", "topic", "created_at", "votes", "article_img_url", "comment_count"]
 
     let queries = Object.keys(queryObject).filter((item) => {
         return item !== "sort_by" && item !== "order"
@@ -243,13 +243,34 @@ exports.fetchAllArticles = (queryObject) => {
     }
     
     else {
+
     let sqlString = 
     `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url,
     COUNT(comments.article_id) ::int AS comment_count
     FROM comments
-    right JOIN articles on articles.article_id = comments.article_id
-    GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC`
+    right JOIN articles on articles.article_id = comments.article_id`
+
+    if (queryObject.sort_by && columns.includes(queryObject.sort_by)) {
+            sqlString += ` GROUP BY articles.article_id ORDER BY ${queryObject.sort_by}`
+        }
+        
+        else sqlString += ` GROUP BY articles.article_id
+        ORDER BY articles.created_at`
+
+        if (queryObject.order){
+            if (queryObject.order === "desc"){
+                sqlString += ` DESC`
+            }
+            else if (queryObject.order === "asc"){
+                sqlString += ` ASC`
+            }
+            else return Promise.reject({
+                status : 404,
+                msg: "bad request"
+            })
+        }
+        else sqlString += ` DESC`
+
     return db.query(sqlString).then((result) => {
         return result.rows
     })
